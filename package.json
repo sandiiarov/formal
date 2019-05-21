@@ -7,16 +7,17 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "test": "jest",
     "prebuild": "yarn workspace @kevinwolf/formal run build",
     "build": "yarn workspace @kevinwolf/formal-web run build && yarn workspace @kevinwolf/formal-native run build",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "test": "jest",
     "validate": "yarn build && yarn lint && yarn test --silent --coverage",
-    "prerelease": "yarn build",
-    "release": "dotenv lerna publish",
     "setup": "yarn install && yarn validate",
     "start:web": "concurrently \"yarn build --watch\" \"yarn workspace @kevinwolf/formal-playground-web start\"",
-    "start:native": "concurrently \"yarn build --watch\" \"yarn workspace @kevinwolf/formal-playground-native start\""
+    "start:native": "concurrently \"yarn build --watch\" \"yarn workspace @kevinwolf/formal-playground-native start\"",
+    "start:docs": "yarn workspace @kevinwolf/formal-docs start",
+    "prerelease": "yarn build",
+    "release": "dotenv lerna publish"
   },
   "dependencies": {},
   "devDependencies": {

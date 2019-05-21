@@ -1,6 +1,6 @@
 <p align="center">
 <!-- START banner -->
-<img alt="Kevin Wolf formal" src="./other/banner.png" width="276" height="161" />
+<img alt="Kevin Wolf formal" src="./other/banner.png" width="606" height="217" />
 <!-- END banner -->
 </p>
 
@@ -58,6 +58,7 @@ Also, some of those packages do not provide out of the box support for both web 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [Usage](#usage)
   - [Usage with React Web](#usage-with-react-web)

@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "version": "0.1.0",
+  "name": "@kevinwolf/formal-docs",
+  "scripts": {
+    "start": "docz dev",
+    "build": "docz build"
+  },
+  "dependencies": {
+    "docz": "^1.0.0-rc.7",
+    "docz-theme-default": "^1.0.0-rc.7",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {}
+}

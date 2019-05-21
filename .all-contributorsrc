@@ -4,7 +4,8 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
-    "README.md"
+    "README.md",
+    "./apps/formal-docs/home.mdx"
   ],
   "imageSize": 100,
   "commit": false,

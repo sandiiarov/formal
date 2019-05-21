@@ -1,0 +1,166 @@
+---
+route: /tutorial/adding-validation
+menu: Tutorial
+name: Adding validation
+---
+
+import TutorialNavigation from "./tutorial-navigation";
+
+# Adding validation
+
+A form management library without validation handling? 🤨 Unacceptable! Let's add some validations to your form.
+
+## Install Yup
+
+[Yup](https://github.com/jquense/yup) is the library **Formal** support for validation. Install it.
+
+```sh
+yarn add yup
+```
+
+## Import Yup
+
+Import the Yup library, below `formal`.
+
+```javascript
+import * as yup from "yup";
+```
+
+## Define your schema
+
+Add the schema definition, just below `initialValues`.
+
+```javascript
+const validationSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+```
+
+## Add the schema to the `useFormal` configuration object
+
+Remember when you added the `onSubmit` handler to the form? Now add a second parameter, `schema`.
+
+```javascript
+const formal = useFormal(initialValues, {
+  schema: validationSchema,
+  onSubmit(values) {
+    console.log("Form submitted with:", values);
+  }
+});
+```
+
+## Show the errors
+
+If you have defined a schema, the form will run its validations before the `submit` action (on the future, you will also be able to run validation [onChange](https://github.com/kevinwolfcr/formal/issues/15) and [onBlur](https://github.com/kevinwolfcr/formal/issues/16)). Lets show the errors for all of the fields if they exist. Add an error placeholder just below each input.
+
+```javascript
+{
+  formal.errors.firstName && <span>{formal.errors.firstName}</span>;
+}
+```
+
+Repeat the same for `lastName` and `email` fields.
+
+## Final code
+
+[commit diff](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c)
+
+```javascript
+import React from "react";
+import * as yup from "yup";
+import useFormal from "@kevinwolf/formal";
+
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: ""
+};
+
+const validationSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema: validationSchema,
+    onSubmit(values) {
+      console.log("Form submitted with:", values);
+    }
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    formal.submit();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="firstName">First name</label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          value={formal.values.firstName}
+          onChange={e => formal.change("firstName", e.target.value)}
+        />
+        {formal.errors.firstName && <span>{formal.errors.firstName}</span>}
+      </div>
+      <div>
+        <label htmlFor="lastName">Last name</label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          value={formal.values.lastName}
+          onChange={e => formal.change("lastName", e.target.value)}
+        />
+        {formal.errors.lastName && <span>{formal.errors.lastName}</span>}
+      </div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          value={formal.values.email}
+          onChange={e => formal.change("email", e.target.value)}
+        />
+        {formal.errors.email && <span>{formal.errors.email}</span>}
+      </div>
+      <div>
+        <button type="button" onClick={formal.reset}>
+          Reset
+        </button>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  );
+}
+```
+
+## Wrapping up
+
+1. You [added](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c#diff-b9cfc7f2cdf78a7f4b91a753d10865a2R12) the yup library.
+2. And [imported](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c#diff-bd9c9dcd314f2d7df52935b3a6a4d504R2) the yup library.
+3. [Defined](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c#diff-bd9c9dcd314f2d7df52935b3a6a4d504R11) a validation schema.
+4. [Added](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c#diff-bd9c9dcd314f2d7df52935b3a6a4d504R22) the validation schema to the hook configuration object.
+5. [Added](https://github.com/kevinwolfcr/formal-tutorial/commit/3bf8997168aeffc0f0d0059966b7c42f6db0899c#diff-bd9c9dcd314f2d7df52935b3a6a4d504R44) the placeholder for the errors on each field.
+
+<TutorialNavigation
+  prev={{ route: "/tutorial/creating-a-form", title: "Creating a form" }}
+  next={{
+    route: "/tutorial/reducing-boilerplate",
+    title: "Reducing boilerplate"
+  }}
+/>

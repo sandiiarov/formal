@@ -1,0 +1,135 @@
+---
+route: /quick-start/native
+menu: Quick start
+name: React Native
+---
+
+# Quick start for React Native
+
+## Basic usage
+
+```typescript
+import React from "react";
+import { Alert, View, Text, TextInput, Button } from "react-native";
+import useFormal from "@kevinwolf/formal-native";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+const initialValues = {
+  firstName: "Tony",
+  lastName: "Stark",
+  email: "ironman@avengers.io"
+};
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema,
+    onSubmit: values => Alert.alert(JSON.stringify(values))
+  });
+
+  return (
+    <View>
+      <View>
+        <Text>First Name</Text>
+        <TextInput {...formal.getFieldProps("firstName")} />
+        {formal.errors.firstName && <Text>{formal.errors.firstName}</Text>}
+      </View>
+
+      <View>
+        <Text>Last Name</Text>
+        <TextInput {...formal.getFieldProps("lastName")} />
+        {formal.errors.lastName && <Text>{formal.errors.lastName}</Text>}
+      </View>
+
+      <View>
+        <Text>Email</Text>
+        <TextInput {...formal.getFieldProps("email")} autoCapitalize="none" />
+        {formal.errors.email && <Text>{formal.errors.email}</Text>}
+      </View>
+
+      <Button {...formal.getSubmitButtonProps()} title="Submit" />
+    </View>
+  );
+}
+```
+
+## Tips
+
+As you can see, the above code became a little verbose due to the repetition of the fields code, in order to abstract that repeated code, you can create a `Field` component and replace all those calls in App.js.
+
+**Field.js**
+
+```typescript
+import React from "react";
+import { View, Text, TextInput } from "react-native";
+
+export default function Field({ label, error, ...props }) {
+  return (
+    <View>
+      <Text>{label}</Text>
+      <TextInput {...props} />
+      {error && <Text>{error}</Text>}
+    </View>
+  );
+}
+```
+
+**App.js** _(refactored)_
+
+```typescript
+import React from "react";
+import { Alert, View, Button } from "react-native";
+import useFormal from "@kevinwolf/formal-native";
+import * as yup from "yup";
+
+import Field from "./field";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+const initialValues = {
+  firstName: "Tony",
+  lastName: "Stark",
+  email: "ironman@avengers.io"
+};
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema,
+    onSubmit: values => Alert.alert(JSON.stringify(values))
+  });
+
+  return (
+    <View>
+      <Field {...formal.getFieldProps("firstName")} label="First name" />
+      <Field {...formal.getFieldProps("lastName")} label="Last name" />
+      <Field
+        {...formal.getFieldProps("email")}
+        label="Email"
+        autoCapitalize="none"
+      />
+
+      <Button {...formal.getSubmitButtonProps()} title="Submit" />
+    </View>
+  );
+}
+```
+
+## What's next?
+
+- 👨🏻‍🏫 Want a step by step guide? [Read the tutorial](/tutorial).
+- 💻 Read the [@kevinwolf/formal-native API reference](/api/native).

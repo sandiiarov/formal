@@ -1,0 +1,55 @@
+---
+route: api/core
+menu: API Reference
+name: Core
+---
+
+# `@kevinwolf/formal` API reference
+
+## Configuration
+
+The `useFormal` hook should receive two parameters: `initialValues` and `config` (which will be explained below the example).
+
+Example:
+
+```javascript
+const formal = useFormal(initialValues, config);
+```
+
+### initialValues
+
+The `initialValues` should be an object on which the keys are the field names and the value the field value.
+
+Example:
+
+```javascript
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: ""
+};
+```
+
+### config
+
+The config is an object in which you can define your validation schema (via [Yup](https://github.com/jquense/yup)) and your `onSubmit` handler.
+
+Example:
+
+```javascript
+import * as yup from "yup";
+
+const config = {
+  schema: yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    email: yup
+      .string()
+      .email()
+      .required()
+  }),
+  onSubmit(values) {
+    console.log("Form submitted with:", values);
+  }
+};
+```

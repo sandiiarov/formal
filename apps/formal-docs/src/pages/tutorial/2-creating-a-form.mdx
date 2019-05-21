@@ -1,0 +1,186 @@
+---
+route: /tutorial/creating-a-form
+menu: Tutorial
+name: Creating a form
+---
+
+import TutorialNavigation from "./tutorial-navigation";
+
+# Creating a form
+
+It's time to add our first form! Open `app.js` in your favorite text editor, this will be the file we will modify across the tutorial.
+
+## Import the library
+
+It's time to import the library into our project, add the following line to `app.js`, below the React import.
+
+```javascript
+import useFormal from "@kevinwolf/formal";
+```
+
+## Define the initial values
+
+Every form needs to have the initial values defined, **even if they are empty**. Let's define our `initialValues` right below the library import.
+
+```javascript
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: ""
+};
+```
+
+## useFormal()
+
+You are ready to `useFormal()`. Hook the form controller **within the `App` component** and define what will happen when you submit the form.
+
+```javascript
+const formal = useFormal(initialValues, {
+  onSubmit(values) {
+    console.log("Form submitted with:", values);
+  }
+});
+```
+
+> 💡The `useFormal()` hook receives two parameters. The first one is the `initialValues` and the second one is an object. For now, just make sure to add an `onSubmit` handler as a property to the configuration object.
+
+## The `formal` object
+
+When you hook the form controller, you will get an API assigned to the `formal` constant. If you want to know what are all the properties returned by `useFormal`, you can take a look at the [api reference](/api/core). For now, we will only focus on the following properties:
+
+1. `values`: the current form values **object**. On init, it will be the same as `initialValues`.
+2. `change(field, value)`: this **method** changes the value of a given field. The first argument is the field name and the second one the new value.
+3. `submit()`: this **method** submits the form and calls the `onSubmit` handler passed to the hook configuration object.
+4. `reset()`: this **method** resets the form to its last successful state. If you haven't called `submit()`, then it will go back to its `initialState`, id you have submitted, it will go back to the current values when you submitted.
+
+## Add a form
+
+Within the `App` component, replace the current welcome message with a form component. Add an `onSubmit` prop to the form.
+
+```javascript
+const handleSubmit = e => {
+  e.preventDefault();
+  formal.submit();
+};
+
+<form onSubmit={handleSubmit}>{/* Form content. */}</form>;
+```
+
+## Add a field
+
+As defined in the `initialValues`, you have three fields: `firstName`, `lastName` and `email`. Let's add the `firstName` input to the `<form />`. Thanks to `formal.values` and `formal.change`, we can define the `value` and `onChange` props for the `<input />`.
+
+```javascript
+<div>
+  <label htmlFor="firstName">First name</label>
+  <input
+    type="text"
+    id="firstName"
+    name="firstName"
+    value={formal.values.firstName}
+    onChange={e => formal.change("firstName", e.target.value)}
+  />
+</div>
+```
+
+Repeat the same for `lastName` and `email`. 🤔 Too much repetition? don't worry, we will get rid of that awful repetition on the following lessons.
+
+> ⚠️ If you are following this tutorial on the cloned repo and see some styling inconsistences, don't worry, we will get rid of them when adding the buttons
+
+## Add some buttons
+
+To finish up, add a reset and submit button at the end of the form, just below the email field.
+
+```javascript
+<div>
+  <button type="button" onClick={formal.reset}>
+    Reset
+  </button>
+  <button type="submit">Submit</button>
+</div>
+```
+
+> 💡 There is no need to add the `formal.submit` to the submit button, since the `type` is `submit`, the `onSubmit` prop of the `<form />` does it.
+
+## Final code
+
+[commit diff](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e)
+
+```javascript
+import React from "react";
+import useFormal from "@kevinwolf/formal";
+
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: ""
+};
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    onSubmit(values) {
+      console.log("Form submitted with:", values);
+    }
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    formal.submit();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="firstName">First name</label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          value={formal.values.firstName}
+          onChange={e => formal.change("firstName", e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="lastName">Last name</label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          value={formal.values.lastName}
+          onChange={e => formal.change("lastName", e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          value={formal.values.email}
+          onChange={e => formal.change("email", e.target.value)}
+        />
+      </div>
+      <div>
+        <button type="button" onClick={formal.reset}>
+          Reset
+        </button>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  );
+}
+```
+
+## Wrapping up
+
+1. You [imported](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R2) the `@kevinwolf/formal` library.
+2. [Created](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R4) the `initialValues` object.
+3. [Hooked](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R11) the `useForm()` hook.
+4. [Added](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R17) a form with onSubmit prop.
+5. [Added](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R24) the `firstName`, `lastName` and `email` fields.
+6. [Added](https://github.com/kevinwolfcr/formal-tutorial/commit/194d08b0134f7ed925b30f79606ce29c1f7cc35e#diff-bd9c9dcd314f2d7df52935b3a6a4d504R54) reset and submit buttons.
+
+<TutorialNavigation
+  prev={{ route: "/tutorial/installation", title: "Installation" }}
+  next={{ route: "/tutorial/adding-validation", title: "Adding validation" }}
+/>

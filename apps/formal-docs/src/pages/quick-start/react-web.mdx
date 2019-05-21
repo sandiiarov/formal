@@ -1,0 +1,132 @@
+---
+route: /quick-start/web
+menu: Quick start
+name: React Web
+---
+
+# Quick start for React Web
+
+## Basic usage
+
+**App.js**
+
+```typescript
+import React from "react";
+import useFormal from "@kevinwolf/formal-web";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+const initialValues = {
+  firstName: "Tony",
+  lastName: "Stark",
+  email: "ironman@avengers.io"
+};
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema,
+    onSubmit: values => console.log("Your values are:", values)
+  });
+
+  return (
+    <form {...formal.getFormProps()}>
+      <div>
+        <label htmlFor="firstName">First Name</label>
+        <input {...formal.getFieldProps("firstName")} type="text" />
+        {form.errors.firstName && <div>{form.errors.firstName}</div>}
+      </div>
+
+      <div>
+        <label htmlFor="lastName">Last Name</label>
+        <input {...formal.getFieldProps("lastName")} type="text" />
+        {form.errors.lastName && <div>{form.errors.lastName}</div>}
+      </div>
+
+      <div>
+        <label htmlFor="email">Email</label>
+        <input {...formal.getFieldProps("email")} type="text" />
+        {form.errors.email && <div>{form.errors.email}</div>}
+      </div>
+
+      <button {...formal.getSubmitButtonProps()} type="submit">
+        Submit
+      </button>
+    </form>
+  );
+}
+```
+
+## Tips
+
+As you can see, the above code became a little verbose due to the repetition of the fields code, in order to abstract that repeated code, you can create a `Field` component and replace all those calls in App.js.
+
+**Field.js**
+
+```typescript
+import React from "react";
+
+export default function Field({ label, error, ...props }) {
+  return (
+    <div>
+      <label htmlFor={props.id}>{label}</label>
+      <input type="text" {...props} />
+      {error && <div>{error}</div>}
+    </div>
+  );
+}
+```
+
+**App.js** _(refactored)_
+
+```typescript
+import React from "react";
+import useFormal from "@kevinwolf/formal-web";
+import * as yup from "yup";
+
+import Field from "./field";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+const initialValues = {
+  firstName: "Tony",
+  lastName: "Stark",
+  email: "ironman@avengers.io"
+};
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema,
+    onSubmit: values => console.log("Your values are:", values)
+  });
+
+  return (
+    <form {...formal.getFormProps()}>
+      <Field label="First Name" {...formal.getFieldProps("firstName")} />
+      <Field label="Last Name" {...formal.getFieldProps("lastName")} />
+      <Field label="Email" {...formal.getFieldProps("email")} />
+
+      <button {...formal.getSubmitButtonProps()}>Submit</button>
+    </form>
+  );
+}
+```
+
+## What's next?
+
+- 👨🏻‍🏫 Want a step by step guide? [Read the tutorial](/tutorial).
+- 💻 Read the [@kevinwolf/formal-web API reference](/api/web).

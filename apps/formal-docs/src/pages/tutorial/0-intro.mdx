@@ -1,0 +1,46 @@
+---
+route: /tutorial
+menu: Tutorial
+name: Intro
+---
+
+import TutorialNavigation from "./tutorial-navigation";
+
+# Tutorial Intro
+
+On this tutorial, I will teach you step by step how to use **Formal** on web (If you have used to React Native, the usage is really similar, if you haven't, dont worry, I will tell you what to do).
+
+## Lessons
+
+1. [Installation](/tutorial/installation)
+2. [Creating a form](/tutorial/creating-a-form)
+3. [Adding validation](/tutorial/adding-validation)
+4. [Reducing boilerplate](/tutorial/reducing-boilerplate)
+
+## Getting the code
+
+I've setup a [github repository](https://github.com/kevinwolfcr/formal-tutorial.git) in order to track the changes made on each one of the lessons.
+
+### Clone the repo
+
+```sh
+git clone https://github.com/kevinwolfcr/formal-tutorial.git && cd $_
+```
+
+### Install dependencencies
+
+```sh
+yarn install
+```
+
+### Running the server
+
+```sh
+yarn start
+```
+
+Open [localhost:1234](localhost:1234). If you see a screen with the text `Welcome to the tutorial!`, then you are good to continue to the next lesson.
+
+<TutorialNavigation
+  next={{ route: "/tutorial/installation", title: "Installation" }}
+/>

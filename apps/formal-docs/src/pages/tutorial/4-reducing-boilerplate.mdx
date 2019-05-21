@@ -1,0 +1,183 @@
+---
+route: /tutorial/reducing-boilerplate
+menu: Tutorial
+name: Reducing boilerplate
+---
+
+import TutorialNavigation from "./tutorial-navigation";
+
+# Reducing boilerplate
+
+I know, I know. You read the **repeat** work several times on the past lessons. Repeating code sucks. Let's add an abstraction to `@kevinwolf/formal` for web platforms and create some components of our own.
+
+## Install Formal Web
+
+Thanks to the hooks nature, extending its functionality it's a really easy task. Install the Formal Web package.
+
+```sh
+yarn add @kevinwolf/formal-web
+```
+
+## Replace the import
+
+Now that you have an abstraction over the core package, let's replace the import of `@kevinwolf/formal` for `@kevinwolf/formal-web`.
+
+```diff
+-import useFormal from '@kevinwolf/formal'
++import useFormal from @kevinwolf/formal-web'
+```
+
+## Remove the core package
+
+With `@kevinwolf/formal-web` depending on `@kevinwolf/formal`, you can safely remove that dependency.
+
+```sh
+yarn remove @kevinwolf/formal
+```
+
+## Prop getters
+
+The `@kevinwolf/formal-web` and `@kevinwolf/formal-native` heavily use prop getters. You can read [this tutorial](https://github.com/manjula91/react-advanced-patterns/tree/master/prop-getters) if you haven't heard about it before.
+
+## getFormProps()
+
+`getFormProps()` returns and object containing `onSubmit` prop. Now you can safely remove `handleSubmit` method and instead spread the props of `getFormProps()`/..
+
+```diff
+-const handleSubmit = e => {
+-  e.preventDefault();
+-  formal.submit();
+-};
+-<form onSubmit={handleSubmit}>
++<form {...formal.getFormProps()}>
+```
+
+## getFieldProps(field)
+
+`getFieldProps(field)` returns an object containing `id`, `name`, `value`, `error` attributes and `onChange` method.
+
+Let's create a `<Field />` component in order to reduce code repetition.
+
+```javascript
+function Field({ label, error, ...props }) {
+  return (
+    <div>
+      <label htmlFor={props.id}>{label}</label>
+      <input type="text" {...props} />
+      {error && <span>{error}</span>}
+    </div>
+  );
+}
+```
+
+Replace the `firstName` markup and repeat the same on `lastName` and `email` (this will be the last time you will read repeat, **I promise!**).
+
+```diff
+-<div>
+-  <label htmlFor="firstName">First name</label>
+-  <input
+-    type="text"
+-    id="firstName"
+-    name="firstName"
+-    value={formal.values.firstName}
+-    onChange={e => formal.change("firstName", e.target.value)}
+-  />
+-  {formal.errors.firstName && <span>{formal.errors.firstName}</span>}
+-</div>
++<Field {...formal.getFieldProps("firstName")} label="First name" />
+```
+
+## getResetButtonProps()
+
+`getResetButtonProps()` will return a `disabled` prop that will be `true` when the form is not dirty and doesn't contain errors, is validating or is submitting, a `type` with `button` value and `onClick` which runs `formal.reset()` when called.
+
+```diff
+-<button type="button" onClick={formal.reset}>
+-  Reset
+-</button>
++<button {...formal.getResetButtonProps()}>Reset</button>
+```
+
+## getSubmitButtonProps()
+
+`getSubmitButtonProps()` will return will return a `disabled` prop that will be `true` when the form is not dirty and doesn't contain errors, is validating or is submitting, and a `type` with `submit` value.
+
+```diff
+-<button type="submit">Submit</button>
++<button {...formal.getSubmitButtonProps()}>Submit</button>
+```
+
+## Final code
+
+commit diff
+
+```javascript
+import React from "react";
+import * as yup from "yup";
+import useFormal from "@kevinwolf/formal-web";
+
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: ""
+};
+
+const validationSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required()
+});
+
+export default function App() {
+  const formal = useFormal(initialValues, {
+    schema: validationSchema,
+    onSubmit(values) {
+      console.log("Form submitted with:", values);
+    }
+  });
+
+  return (
+    <form {...formal.getFormProps()}>
+      <Field {...formal.getFieldProps("firstName")} label="First name" />
+      <Field {...formal.getFieldProps("lastName")} label="Last name" />
+      <Field {...formal.getFieldProps("email")} label="Email" />
+      <div>
+        <button {...formal.getResetButtonProps()}>Reset</button>
+        <button {...formal.getSubmitButtonProps()}>Submit</button>
+      </div>
+    </form>
+  );
+}
+
+function Field({ label, error, ...props }) {
+  return (
+    <div>
+      <label htmlFor={props.id}>{label}</label>
+      <input type="text" {...props} />
+      {error && <span>{error}</span>}
+    </div>
+  );
+}
+```
+
+## Wrapping up
+
+1. First you [installed](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-b9cfc7f2cdf78a7f4b91a753d10865a2R9) the `@kevinwolf/formal-web` library.
+2. [Replaced](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-bd9c9dcd314f2d7df52935b3a6a4d504R3) the import of `@kevinwolf/formal`.
+3. [Add](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-bd9c9dcd314f2d7df52935b3a6a4d504R29) `getFormProps()`.
+4. [Add](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-bd9c9dcd314f2d7df52935b3a6a4d504R30) `getFieldProps()`.
+5. [Add](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-bd9c9dcd314f2d7df52935b3a6a4d504R34) `getResetButtonProps()`.
+6. [Add](https://github.com/kevinwolfcr/formal-tutorial/commit/80d57eb32748f2565ea8bb96cdcb41b6fb4918fb#diff-bd9c9dcd314f2d7df52935b3a6a4d504R35) `getSubmitButtonProps()`.
+
+## What's next?
+
+- 📦Read the [@kevinwlf/formal API reference](/api/core).
+- 💻 Read the [@kevinwlf/formal-web API reference](/api/web).
+- 📱 Read the [@kevinwlf/formal-mobile API reference](/api/mobile).
+
+<TutorialNavigation
+  prev={{ route: "/tutorial/adding-validation", title: "Adding validation" }}
+/>
