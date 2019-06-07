@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "@kevinwolf/formal",
   "author": "Kevin Wolf <hi@kevinwolf.me>",
   "description": "Elegant form management primitives for the react hooks era",
