@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "@kevinwolf/formal-playground-web",
   "scripts": {
     "start": "start-storybook -c src -p 3000",
@@ -10,7 +10,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.10",
-    "@kevinwolf/formal-web": "^0.1.2",
+    "@kevinwolf/formal-web": "^0.1.3",
     "@storybook/addon-actions": "^5.0.6",
     "@storybook/addon-centered": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
