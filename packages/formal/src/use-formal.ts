@@ -109,9 +109,9 @@ export default function useFormal<Schema>(
   const getSubmitButtonProps = useCallback(
     () => ({
       disabled:
-        (!isDirty && objectIsEmpty(errors)) || isValidating || isSubmitting,
+        (!isDirty && !isSubmitted && objectIsEmpty(errors)) || isValidating || isSubmitting,
     }),
-    [errors, isDirty, isSubmitting, isValidating]
+    [errors, isDirty, isSubmitted, isSubmitting, isValidating]
   )
 
   return {
