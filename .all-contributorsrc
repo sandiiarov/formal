@@ -1,6 +1,6 @@
 {
   "projectName": "formal",
-  "projectOwner": "kevinwolfcr",
+  "projectOwner": "iamkevinwolf",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -65,6 +65,15 @@
       "contributions": [
         "bug",
         "code"
+      ]
+    },
+    {
+      "login": "gaboesquivel",
+      "name": "Gabo Esquivel",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/391270?v=4",
+      "profile": "https://gaboesquivel.com",
+      "contributions": [
+        "bug"
       ]
     }
   ],
