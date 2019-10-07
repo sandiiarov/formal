@@ -27,7 +27,7 @@
     "@types/yup": "^0.26.12",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "codecov": "^3.3.0",
-    "concurrently": "^4.1.0",
+    "concurrently": "^5.0.0",
     "doctoc": "^1.4.0",
     "dotenv-cli": "^2.0.0",
     "eslint": "^5.16.0",
