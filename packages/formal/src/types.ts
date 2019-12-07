@@ -47,9 +47,9 @@ export interface FormalState<Schema> {
   change: (field: keyof Schema, value: any) => void
   setErrors: (errors: FormalErrors<Schema>) => void
   clearErrors: () => void
-  validate: () => void
+  validate: () => Promise<void>
   reset: () => void
-  submit: () => void
+  submit: () => Promise<void>
 
   // Getters.
   getFieldProps: (field: keyof Schema) => FormalFieldProps
